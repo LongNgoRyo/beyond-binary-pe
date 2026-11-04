@@ -1,0 +1,68 @@
+# Data directories (large files, not for version control)
+data/
+Win64_train/
+Win64_test/
+
+# Experiment outputs
+experiments/
+results/
+
+# Archive
+archive/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Kaggle
+kaggle/
+*.json
+
+# Local outputs
+*.log
+*.npz
+*.pkl
+*.h5
+*.onnx
+*.model
