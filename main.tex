@@ -608,24 +608,21 @@ Extending training from Weeks 1--48 to Weeks 1--52 (adding the validation window
 Zero-deleting each feature group (a perturbation distinct from permutation) on 20{,}000 held-out test samples reproduces the permutation-importance ranking: Spearman rank agreement $\rho = 0.929$ ($p = 0.001$; largest deletion drop for the Header group at $+0.015$). This supports that the group-level consensus reflects genuine feature reliance rather than permutation artifacts.
 
 \noindent\textbf{Curriculum ablation across five seeds: a negative result.}
-Motivated by the single-seed ablation (0.5345 ungated at seed 3407 without logit adjustment), we hypothesized that removing prior-based logit adjustment from the full curriculum would improve long-tail robustness. Across five seeds (3407$\to$0.416, 42$\to$0.268, 123$\to$0.349, 2024$\to$0.146, 9999$\to$0.300), the simplified configuration (focal + soft Macro-F1, no logit adjustment) achieves 7-class gated Macro-F1 $0.296 \pm 0.101$ (malware-only $0.171 \pm 0.038$) --- substantially \emph{below} the full curriculum ($0.5114 \pm 0.0122$) with high seed variance (sample standard deviation, ddof=1). The hypothesis is therefore \textbf{not supported}: the prior-based logit adjustment is a necessary stabilizer for long-tailed family attribution under this feature regime. We report this result rather than selecting the more favorable single-seed estimate, and retain the full curriculum as the training recipe.
+Motivated by the single-seed ablation (0.5345 ungated at seed 3407 without logit adjustment), we hypothesized that removing prior-based logit adjustment from the full curriculum would improve long-tail robustness. Across five seeds (3407$\to$0.416, 42$\to$0.268, 123$\to$0.349, 2024$\to$0.146, 9999$\to$0.300), the simplified configuration (focal + soft Macro-F1, no logit adjustment) achieves 7-class gated Macro-F1 $0.296$ (mean, no std reported) --- substantially \emph{below} the full curriculum mean $0.5114$ with high seed variance. The hypothesis is therefore \textbf{not supported}: the prior-based logit adjustment is a necessary stabilizer for long-tailed family attribution under this feature regime. We report this result rather than selecting the more favorable single-seed estimate, and retain the full curriculum as the training recipe.
 
-\textbf{Statistical significance:} A paired t-test on the five per-seed differences comparing full curriculum vs.\ no-logit-adjustment on family Macro-F1 yields $p\approx0.01$ (two-sided), confirming that the $0.215$ absolute improvement is not attributable to seed variance. (The one-sided sign-test minimum with five seeds is $1/32\approx0.031$; the two-sided minimum is $0.0625$, so $p=0.031$ would not be a valid two-sided claim.) For rare classes (Ransomware N=162), bootstrap confidence intervals are wide and should be interpreted with caution.
+\textbf{Statistical significance:} The absolute difference between the full curriculum mean ($0.5114$) and the no-logit-adjustment mean ($0.296$) is $\approx0.215$ (macro F1); per-seed full-curriculum values are not reported in the public kernel output, so a paired significance test cannot be reproduced from the released data.  For rare classes (Ransomware N=162), bootstrap confidence intervals are wide and should be interpreted with caution.
 
 \begin{table}[htbp]
-\caption{Curriculum ablation across five seeds (gated Family Macro-F1, 7 classes, consensus subset). Full curriculum = focal CE + class-balanced weights + soft Macro-F1 + logit adjustment + manifold mixup. ``No logit adj.'' removes prior-based logit adjustment only. Standard deviation is sample SD (ddof=1). High seed variance for rare classes (Ransomware N=162) explains the single-seed outlier (0.5345 ungated at seed 3407) that does not replicate across five seeds. The no-logit-adjustment malware-only mean is 0.171, not the first-seed value 0.207; the full-curriculum malware-only mean is 0.378, not the first-seed value 0.381.}\label{tab:curriculum_ablation_5seeds}
+\\caption{Curriculum ablation across five seeds (gated Family Macro-F1, 7 classes, consensus subset). Full curriculum = focal CE + class-balanced weights + soft Macro-F1 + logit adjustment + manifold mixup. ``No logit adj.'' removes prior-based logit adjustment only. No per-seed standard deviation is available for the full curriculum from the released kernel output; only the mean is reported.}\label{tab:curriculum_ablation_5seeds}
 \centering\footnotesize
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lcc@{}}
 \toprule
-\textbf{Configuration} & \textbf{Mean $\pm$ std} & \textbf{Seed values} \\
+\\textbf{Configuration} & \\textbf{Mean} & \\textbf{Seed values} \\\\
 \midrule
-Full curriculum (logit adjustment) & $0.5104\pm0.0091$ & 0.511, 0.498, 0.505, 0.520, 0.518 \\
-No logit adjustment & $0.296\pm0.101$ & 0.416, 0.268, 0.349, 0.146, 0.300 \\
+Full curriculum (logit adjustment) & $0.5114$ (mean, no std reported) & --- \\
+No logit adjustment & $0.296$ (mean, no std reported) & --- \\
 No soft Macro-F1 (single seed 3407) & $0.302$ (single) & 0.302 \\
-\midrule
-Full curriculum (malware-only, 6 classes) & $0.3784\pm0.0071$ & 0.381, 0.369, 0.375, 0.388, 0.379 \\
-No logit adjustment (malware-only) & $0.171\pm0.038$ & 0.207, 0.158, 0.179, 0.112, 0.200 \\
 \bottomrule
 \end{tabular}
 \end{table}
